@@ -1,0 +1,16 @@
+{
+  "dev": {
+    "driver": "pg",
+    "user": "root",
+    "password": "root",
+    "host": "127.0.0.1",
+    "database": "user_service"
+  },
+  "prod": {
+    "driver": "pg",
+    "user": "user_service",
+    "password": "user_service#2023",
+    "host": "xxxxxxxxxx.eu-central-1.compute.amazonaws.com",
+    "database": "user_service"
+  }
+}

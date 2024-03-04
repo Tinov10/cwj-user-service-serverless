@@ -1,0 +1,84 @@
+// signup 
+
+{
+  "email": "Martijn", 
+  "password": "sdljflko4u9", 
+  "phone": "3454656546" 
+}
+
+// login
+
+{
+  "email": "Martijn", 
+  "password": "sdljflko4u9"
+}
+
+// verify code 
+
+{
+  "code": "xxxxxx" 
+}
+
+// create profile 
+
+{
+  "firstName": "Martijn", 
+  "lasName": "Versteeg",
+  "userType": "SELLER", 
+  "address": {
+    "addressLine1": "my address 1", 
+    "addressLine2": "my address line 2", 
+    "city": "Utrecht", 
+    "postCode": "324345", 
+    "country": "DE"
+  }
+}
+
+// update profile 
+
+{
+  "firstName": "Martijn", 
+  "lasName": "Versteeg",
+  "userType": "SELLER", 
+  "address": {
+    "id": 2,                                !!!!
+    "addressLine1": "my address 1", 
+    "addressLine2": "my address line 2", 
+    "city": "Utrecht", 
+    "postCode": "324345", 
+    "country": "DE"
+  }
+}
+
+// get product by id 
+
+{
+  "action": "GET_PRODUCT", 
+  "productId": "dfdgdggdfgdfg"
+}
+
+// create Cart (add item to Cart)
+
+{
+  "qty": "1", 
+  "productId": "dfdgdggdfgdfg"
+}
+
+
+// join seller program reqBody
+
+{
+  "firstName": "Martijn", 
+  "lasName": "Versteeg",
+  "phoneNumber": "3454656546", 
+  "bankAcountNumber": "354554354", 
+  "swiftCode": "DB325454", 
+  "paymentType": "regular",
+  "address": {
+    "addressLine1": "my address 1", 
+    "addressLine2": "my address line 2", 
+    "city": "Utrecht", 
+    "postCode": "324345", 
+    "country": "DE"
+  }
+}

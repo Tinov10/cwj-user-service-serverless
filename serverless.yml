@@ -1,0 +1,181 @@
+service: user-service
+frameworkVersion: "3"
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  versionFunctions: false
+  stage: "dev"
+  region: eu-central-1
+  httpApi:
+    cors: true
+    
+  # SNS Topic
+  environment:
+    SNS_TOPIC: { Ref: CustomerTopic }
+
+    NOTIFY_TOPIC:
+      "Fn::ImportValue": "notifySvcArn"
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sns:Publish"
+      Resource:
+        - !Ref CustomerTopic
+        - "Fn::ImportValue": "notifySvcArn"
+
+custom:
+  stage: "dev"
+  serverless-offline:
+    httpPort: 4000
+    lambdaPort: 4002
+
+functions:
+  signup:
+    handler: app/handler.SignUp
+    events:
+      - httpApi:
+          path: /signup
+          method: post
+
+  login:
+    handler: app/handler.Login
+    events:
+      - httpApi:
+          path: /login
+          method: post
+
+  verify:
+    handler: app/handler.Verify
+    events:
+      - httpApi:
+          path: /verify
+          method: post
+
+  get-verification-code:
+    handler: app/handler.GetVerificationCode
+    events:
+      - httpApi:
+          path: /verify
+          method: get
+
+  create-profile:
+    handler: app/handler.CreateProfile
+    events:
+      - httpApi:
+          path: /user
+          method: post
+
+  edit-profile:
+    handler: app/handler.EditProfile
+    events:
+      - httpApi:
+          path: /user
+          method: put
+
+  get-profile:
+    handler: app/handler.GetProfile
+    events:
+      - httpApi:
+          path: /user
+          method: get
+
+  # Cart Section
+  create-cart:
+    handler: app/handler.CreateCart
+    timeout: 20
+    events:
+      - httpApi:
+          path: /cart
+          method: post
+
+  edit-cart:
+    handler: app/handler.EditCart
+    timeout: 20
+    events:
+      - httpApi:
+          path: /cart/{id}
+          method: put
+
+  get-cart:
+    handler: app/handler.GetCart
+    timeout: 20
+    events:
+      - httpApi:
+          path: /cart
+          method: get
+
+  delete-cart:
+    handler: app/handler.DeleteCart
+    timeout: 20
+    events:
+      - httpApi:
+          path: /cart/{id}
+          method: delete
+
+  # when clicked on buy products  
+  collect-payment:
+    handler: app/handler.CollectPayment
+    timeout: 20
+    events:
+      - httpApi:
+          path: /collect-payment
+          method: post
+  
+  # when clicked on buy products
+  place-order:
+    handler: app/handler.PlaceOrder
+    timeout: 20
+    events:
+      - httpApi:
+          path: /order
+          method: post
+  
+  # Seller Section
+  joinSellerProgram:
+    handler: app/handler.JoinSellerProgram
+    events: 
+      - httpApi: 
+          path: /join
+          method: post 
+  
+  getPaymentMethod:
+    handler: app/handler.GetPaymentMethods
+    events: 
+      - httpApi: 
+          path: /payment-methods
+          method: get
+  
+  editPaymentMethod:
+    handler: app/handler.EditPaymentMethods
+    events: 
+      - httpApi: 
+          path: /payment-methods/{id}
+          method: put
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+  - serverless-plugin-optimize
+
+package:
+  individually: true
+
+resources:
+  Resources:
+    CustomerTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: "customer sns topic description"
+        TopicName: CustomerTopic
+
+  # output for later usages
+  Outputs:
+    CustomerTopicInfo:
+      Description: customer-topic
+      Value: !Ref CustomerTopic
+      Export:
+        Name: customer-topic
